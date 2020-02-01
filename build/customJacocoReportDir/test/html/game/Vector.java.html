@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Vector.java</span></div><h1>Vector.java</h1><pre class="source lang-java linenums">package game;
+
+/**
+ * This class will be used to keep track of the objects in
+ * 2D space.
+ */
+
+@SuppressWarnings(&quot;PMD.BeanMembersShouldSerialize&quot;)
+public class Vector {
+
+    /**
+     * X location.
+     */
+    public double axis1;
+    /**
+     * Y location.
+     */
+    public double axis2;
+
+
+    /**
+     * Creating a vector from an angle.
+     * @param angle - given angle.
+     */
+
+<span class="fc" id="L26">    public Vector(double angle) {</span>
+<span class="fc" id="L27">        this.axis1 = Math.cos(angle);</span>
+<span class="fc" id="L28">        this.axis2 = Math.sin(angle);</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Creates a vector from x and y location.
+     * @param axis1 x axis
+     * @param axis2 y axis
+     */
+
+<span class="fc" id="L37">    public Vector(double axis1, double axis2) {</span>
+<span class="fc" id="L38">        this.axis1 = axis1;</span>
+<span class="fc" id="L39">        this.axis2 = axis2;</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Creating a new vector from an old one.
+     * @param vector - vector to copy.
+     */
+
+<span class="fc" id="L47">    public Vector(Vector vector) {</span>
+<span class="fc" id="L48">        this.axis1 = vector.axis1;</span>
+<span class="fc" id="L49">        this.axis2 = vector.axis2;</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Setting the component of this vector.
+     * @param axis1 - location X
+     * @param axis2 - location Y
+     * @return - a vector
+     */
+    public Vector set(double axis1, double axis2) {
+<span class="fc" id="L59">        this.axis1 = axis1;</span>
+<span class="fc" id="L60">        this.axis2 = axis2;</span>
+<span class="fc" id="L61">        return this;</span>
+    }
+
+    /**
+     * Adding vectors.
+     * @param vector - game.Vector that you wanna add.
+     * @return summed vector
+     */
+    public Vector add(Vector vector) {
+<span class="fc" id="L70">        this.axis1 += vector.axis1;</span>
+<span class="fc" id="L71">        this.axis2 += vector.axis2;</span>
+<span class="fc" id="L72">        return this;</span>
+    }
+
+    /**
+     * Scaling the vector.
+     * @param scalar - the scalar you wanna scale with.
+     * @return scaled vector
+     */
+    public Vector scaleBy(double scalar) {
+<span class="fc" id="L81">        this.axis1 *= scalar;</span>
+<span class="fc" id="L82">        this.axis2 *= scalar;</span>
+<span class="fc" id="L83">        return this;</span>
+    }
+
+    /**
+     * Normalizing a vector.
+     * @return - normalized vector.
+     */
+    public Vector normalize() {
+<span class="fc" id="L91">        double lengthOfVector = getLengthSquared();</span>
+<span class="fc bfc" id="L92" title="All 4 branches covered.">        if (lengthOfVector != 0.0f &amp;&amp; lengthOfVector != 1.0f) {</span>
+<span class="fc" id="L93">            lengthOfVector = Math.sqrt(lengthOfVector);</span>
+<span class="fc" id="L94">            this.axis1 /= lengthOfVector;</span>
+<span class="fc" id="L95">            this.axis2 /= lengthOfVector;</span>
+        }
+<span class="fc" id="L97">        return this;</span>
+    }
+
+    /**
+     * Getting the length of the vector and squaring it.
+     * @return square length of a vector.
+     */
+    public double getLengthSquared() {
+<span class="fc" id="L105">        return (axis1 * axis1 + axis2 * axis2);</span>
+    }
+
+    /**
+     * Distance between two vectors.
+     * @param vector - vector to find distance between.
+     * @return - the distance between the vectors
+     */
+    public double getDistanceToSquared(Vector vector) {
+<span class="fc" id="L114">        double distanceX = this.axis1 - vector.axis1;</span>
+<span class="fc" id="L115">        double distanceY = this.axis2 - vector.axis2;</span>
+<span class="fc" id="L116">        double distance = (distanceX * distanceX + distanceY * distanceY);</span>
+<span class="fc" id="L117">        return distance;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

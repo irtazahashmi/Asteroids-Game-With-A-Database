@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="SizeOfAsteroidTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2019-12-19T23:17:14" hostname="Irtazas-MacBook-Pro.local" time="0.003">
+  <properties/>
+  <testcase name="smallConstructorTest()" classname="SizeOfAsteroidTest" time="0.001"/>
+  <testcase name="mediumConstructorTest()" classname="SizeOfAsteroidTest" time="0.001"/>
+  <testcase name="largeConstructorTest()" classname="SizeOfAsteroidTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

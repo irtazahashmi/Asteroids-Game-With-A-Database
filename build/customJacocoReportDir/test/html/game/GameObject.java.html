@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">GameObject.java</span></div><h1>GameObject.java</h1><pre class="source lang-java linenums">package game;
+
+import gui.GameScene;
+
+import java.awt.Graphics2D;
+
+/**
+ * The abstract class game objects.
+ */
+@SuppressWarnings({&quot;PMD.BeanMembersShouldSerialize&quot;, &quot;PMD.AvoidFieldNameMatchingMethodName&quot;,
+        &quot;PMD.AvoidLiteralsInIfCondition&quot;})
+public abstract class GameObject {
+
+    /**
+     * Position of the game object.
+     */
+    protected Vector position;
+    /**
+     * Velocity of the game object.
+     */
+    protected Vector velocity;
+    /**
+     * Rotation of the game object.
+     */
+    protected double rotation;
+    /**
+     * Radius of the game object.
+     */
+    protected double radius;
+    /**
+     * Is the game object alive.
+     */
+    private boolean isAlive;
+
+    /**
+     * Total points.
+     */
+    private int points;
+
+    public void setVelocity(Vector velocity) {
+<span class="nc" id="L41">        this.velocity = velocity;</span>
+<span class="nc" id="L42">    }</span>
+
+    public void setPosition(Vector position) {
+<span class="nc" id="L45">        this.position = position;</span>
+<span class="nc" id="L46">    }</span>
+
+    /**
+     * The constructor method.
+     * @param position of game.GameObject
+     * @param velocity of game.GameObject
+     * @param radius of game.GameObject
+     * @param points of game.GameObject
+     */
+<span class="fc" id="L55">    public GameObject(Vector position, Vector velocity, double radius, int points) {</span>
+<span class="fc" id="L56">        this.position = position;</span>
+<span class="fc" id="L57">        this.velocity = velocity;</span>
+<span class="fc" id="L58">        this.radius = radius;</span>
+<span class="fc" id="L59">        this.rotation = 0.0f;</span>
+<span class="fc" id="L60">        this.points = points;</span>
+<span class="fc" id="L61">        this.isAlive = false;</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Rotate the game object.
+     * @param amount by the amount you wanna rotate.
+     */
+    public void rotate(double amount) {
+<span class="fc" id="L69">        this.rotation += amount;</span>
+<span class="fc" id="L70">        this.rotation %= Math.PI * 2;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Get points.
+     * @return Number of points.
+     */
+    public int getPoints() {
+<span class="fc" id="L78">        return points;</span>
+    }
+
+    /**
+     * Is the game object alive.
+     */
+    public void isAlive() {
+<span class="fc" id="L85">        this.isAlive = true;</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Get game object position.
+     * @return Vector position of the game object.
+     */
+    public Vector getPosition() {
+<span class="fc" id="L93">        return position;</span>
+    }
+    /**
+     * Get game object velocity.
+     * @return Vector velocity of the game object.
+     */
+    public Vector getVelocity() {
+<span class="fc" id="L100">        return velocity;</span>
+    }
+
+    /**
+     * Get game object rotation.
+     * @return rotation of the game object.
+     */
+    public double getRotation() {
+<span class="fc" id="L108">        return rotation;</span>
+    }
+
+    /**
+     * Get game object radius.
+     * @return radius of the game object.
+     */
+    public double getRadius() {
+<span class="fc" id="L116">        return radius;</span>
+    }
+
+    /**
+     * Does the object have to be removed from the game.
+     * @return boolean of whether to remove the object or not.
+     */
+    public boolean needsRemoval() {
+<span class="fc" id="L124">        return isAlive;</span>
+    }
+
+    /**
+     * The method updating the game.
+     * @param game current
+     */
+    public void updateGame(Game game) {
+<span class="fc" id="L132">        position.add(velocity);</span>
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (position.axis1 &lt; 0.0f) {</span>
+<span class="nc" id="L135">            position.axis1 += GameScene.SCREEN_SIZE;</span>
+        }
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (position.axis2 &lt; 0.0f) {</span>
+<span class="nc" id="L138">            position.axis2 += GameScene.SCREEN_SIZE;</span>
+        }
+<span class="fc" id="L140">        position.axis1 %= GameScene.SCREEN_SIZE;</span>
+<span class="fc" id="L141">        position.axis2 %= GameScene.SCREEN_SIZE;</span>
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Did the game object collide.
+     * @param gameObject the game object.
+     * @return boolean of did they collide or not.
+     */
+    public boolean didCollide(GameObject gameObject) {
+<span class="fc" id="L150">        double radius = gameObject.getRadius() + getRadius();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        return (position.getDistanceToSquared(gameObject.position) &lt; radius * radius);</span>
+    }
+
+    /**
+     * Handle collisions.
+     * @param game current game.
+     * @param other the other game object that collided with.
+     */
+    public abstract void collisionHandler(Game game, GameObject other);
+
+    /**
+     * draw game object.
+     * @param graphics2D current graphics.
+     * @param game current game.
+     */
+    public abstract void drawObject(Graphics2D graphics2D, Game game);
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

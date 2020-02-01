@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Asteroid.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Asteroid.java</span></div><h1>Asteroid.java</h1><pre class="source lang-java linenums">package game;
+
+import gui.GameScene;
+
+import java.awt.Graphics2D;
+import java.io.File;
+import java.util.Random;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.JOptionPane;
+
+/**
+ * The asteroid class.
+ */
+@SuppressWarnings({&quot;PMD.DataflowAnomalyAnalysis&quot;, &quot;PMD.MissingSerialVersionUID&quot;, &quot;Duplicates&quot;})
+public class Asteroid extends GameObject {
+
+    /**
+     * The minimum rotation of the asteroid.
+     */
+    private static final double MINIMUM_ROTATION = 0.0075;
+    /**
+     * The maximum rotation of the asteroid.
+     */
+    private static final double MAXIMUM_ROTATION = 0.0175;
+    /**
+     * The difference in rotation of the asteroid.
+     */
+    private static final double DIFFERENCE_IN_ROTATION = MAXIMUM_ROTATION - MINIMUM_ROTATION;
+    /**
+     * The minimum velocity of the asteroid.
+     */
+    private static final double MINIMUM_VELOCITY = 0.8;
+    /**
+     * The maximum velocity of the asteroid.
+     */
+    private static final double MAXIMUM_VELOCITY = 2;
+    /**
+     * The difference in velocity of the asteroid.
+     */
+    private static final double VELOCITY_DIFFERENCE = MAXIMUM_VELOCITY - MINIMUM_VELOCITY;
+    /**
+     * The minimum distance the asteroid should travel.
+     */
+    private static final double MINIMUM_DISTANCE = 200.0;
+    /**
+     * The maximum distance the asteroid should travel.
+     */
+    private static final double MAXIMUM_DISTANCE = GameScene.SCREEN_SIZE / 2.0;
+    /**
+     * The difference in distance the asteroid should travel.
+     */
+    private static final double DISTANCE_DIFFERENCE = MAXIMUM_DISTANCE - MINIMUM_DISTANCE;
+
+    private static final float SPAWN_UPDATES = 10;
+
+    /**
+     * The size of the asteroid.
+     */
+    private transient SizeOfAsteroid size;
+
+    /**
+     * The rotational speed of the asteroid.
+     */
+    private transient double rotationSpeed;
+
+    /**
+     * Asteroid constructor.
+     * @param random a random value
+     */
+    public Asteroid(Random random) {
+<span class="fc" id="L73">        super(calculatePosition(random), calculateVelocity(random),</span>
+                SizeOfAsteroid.LargeAsteroid.radius, SizeOfAsteroid.LargeAsteroid.points);
+<span class="fc" id="L75">        this.rotationSpeed = -MINIMUM_ROTATION + (random.nextDouble() * DIFFERENCE_IN_ROTATION);</span>
+<span class="fc" id="L76">        this.size = SizeOfAsteroid.LargeAsteroid;</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * The constructor creating new asteroid form a parent.
+     * @param parent of asteroid
+     * @param size of asteroid
+     * @param random of asteroid
+     */
+    public Asteroid(Asteroid parent, SizeOfAsteroid size, Random random) {
+<span class="fc" id="L86">        super(new Vector(parent.position), calculateVelocity(random), size.radius, size.points);</span>
+<span class="fc" id="L87">        this.rotationSpeed = MINIMUM_ROTATION + (random.nextDouble() * DIFFERENCE_IN_ROTATION);</span>
+<span class="fc" id="L88">        this.size = size;</span>
+
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for (int i = 0; i &lt; SPAWN_UPDATES; i++) {</span>
+<span class="fc" id="L91">            updateGame(null);</span>
+        }
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Calculate the current initial position of the asteroid.
+     * @param random a random number
+     * @return a vector which is the position of the asteroid.
+     */
+    private static Vector calculatePosition(Random random) {
+<span class="fc" id="L101">        Vector vec = new Vector(GameScene.SCREEN_SIZE / 2.0, GameScene.SCREEN_SIZE / 2.0);</span>
+<span class="fc" id="L102">        return vec.add(new Vector(random.nextDouble() * Math.PI * 2)</span>
+<span class="fc" id="L103">                .scaleBy(MINIMUM_DISTANCE + random.nextDouble() * DISTANCE_DIFFERENCE));</span>
+    }
+
+
+    /**
+     * Calaculate the initial velocity of the asteroid.
+     * @param random random value
+     * @return a vector which is the position of the asteroid.
+     */
+    private static Vector calculateVelocity(Random random) {
+<span class="fc" id="L113">        return new Vector(random.nextDouble() * Math.PI * 2)</span>
+<span class="fc" id="L114">                .scaleBy(MINIMUM_VELOCITY + random.nextDouble() * VELOCITY_DIFFERENCE);</span>
+    }
+
+
+    /**
+     * Update the game.
+     * @param game current game.
+     */
+    @Override
+    public void updateGame(Game game) {
+<span class="fc" id="L124">        super.updateGame(game);</span>
+<span class="fc" id="L125">        rotate(rotationSpeed);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Draw the asteroid object.
+     * @param graphics2D the graphics used to paint the game.
+     * @param game current game.
+     */
+    @Override
+    public void drawObject(Graphics2D graphics2D, Game game) {
+<span class="fc" id="L135">        graphics2D.drawPolygon(size.polygon);</span>
+<span class="fc" id="L136">        graphics2D.fillPolygon(size.polygon);</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Handle the collisions.
+     * @param game current game.
+     * @param other the other game object the asteroid is colliding with.
+     */
+    @Override
+    public void collisionHandler(Game game, GameObject other) {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (other.getClass() != Asteroid.class) {</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">            if (size != SizeOfAsteroid.SmallAsteroid) {</span>
+<span class="nc" id="L148">                SizeOfAsteroid spawnSize = SizeOfAsteroid.values()[size.ordinal() - 1];</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L150">                    game.registerEntity(new Asteroid(this, spawnSize, game.getRandom()));</span>
+                }
+            }
+
+<span class="fc" id="L154">            isAlive();</span>
+<span class="fc" id="L155">            playExplosionSoundEffect(&quot;src/main/java/game/media/explosion.wav&quot;);</span>
+<span class="fc" id="L156">            game.addScore(getPoints());</span>
+        }
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Playing the sound effect of explosion when an asteroid is destroyed.
+     * @param filepath filepath of the sound clip.
+     */
+    private void playExplosionSoundEffect(String filepath) {
+        try {
+<span class="fc" id="L166">            AudioInputStream audioInputStream = AudioSystem</span>
+<span class="fc" id="L167">                    .getAudioInputStream(new File(filepath));</span>
+<span class="fc" id="L168">            Clip clip = AudioSystem.getClip();</span>
+<span class="fc" id="L169">            clip.open(audioInputStream);</span>
+<span class="fc" id="L170">            clip.start();</span>
+<span class="fc" id="L171">            clip.start();</span>
+
+<span class="nc" id="L173">        } catch (Exception e) {</span>
+<span class="nc" id="L174">            JOptionPane.showMessageDialog(null,</span>
+                    &quot;Help, can't find music file!&quot;);
+<span class="fc" id="L176">        }</span>
+<span class="fc" id="L177">    }</span>
+
+    public SizeOfAsteroid getSize() {
+<span class="fc" id="L180">        return size;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

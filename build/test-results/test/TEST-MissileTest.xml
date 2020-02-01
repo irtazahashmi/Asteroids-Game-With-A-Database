@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MissileTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2019-12-19T23:17:14" hostname="Irtazas-MacBook-Pro.local" time="0.014">
+  <properties/>
+  <testcase name="getSizeAsteroidTest()" classname="MissileTest" time="0.001"/>
+  <testcase name="updateGameNoLifespanTest()" classname="MissileTest" time="0.001"/>
+  <testcase name="constructorTest()" classname="MissileTest" time="0.001"/>
+  <testcase name="collisionHandlerTest()" classname="MissileTest" time="0.001"/>
+  <testcase name="updateGameTest()" classname="MissileTest" time="0.0"/>
+  <testcase name="collisionRocketTest()" classname="MissileTest" time="0.001"/>
+  <testcase name="rotateTest()" classname="MissileTest" time="0.001"/>
+  <testcase name="getPointsTest()" classname="MissileTest" time="0.0"/>
+  <testcase name="drawObjectTest()" classname="MissileTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

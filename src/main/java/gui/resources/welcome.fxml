@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: radial-gradient(focus-angle 55deg, focus-distance 150%, center 40% 100%, radius 85%, #211721, #151324 75%, #090A0F);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.Welcome">
+   <children>
+      <Label id="title" layoutX="146.0" layoutY="150.0" prefHeight="100.0" prefWidth="508.0" text=" ASTEROIDS" textAlignment="CENTER" textFill="#cbe8ff" visible="false">
+         <font>
+            <Font name="TRON" size="51.0" />
+         </font></Label>
+      <VBox layoutX="250.0" layoutY="300.0" prefHeight="200.0" prefWidth="300.0">
+         <children>
+            <TextField fx:id="user" onMouseClicked="#sendLogin" promptText="USERNAME" style="-fx-background-color: transparent;                -fx-border-color: #cbe8ff;                -fx-border-width: 0 0 1 0;                -fx-text-fill: #cbe8ff;                -fx-font-size: 11;">
+<!--               /*-fx-prompt-text-fill: #DDD;*/-->
+<!--               /*-fx-font-family: 'Audiowide';*/>-->
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </TextField>
+            <PasswordField fx:id="pass" promptText="PASSWORD" style="             -fx-background-color: transparent;             -fx-border-color: #cbe8ff;             -fx-border-width: 0 0 1 0;             -fx-text-fill: #cbe8ff;             -fx-font-size: 11;">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </PasswordField>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="log" mnemonicParsing="false" onMouseClicked="#clickLog" onMouseEntered="#enterLog" onMouseExited="#exitLog" prefWidth="142.5" style="                   -fx-border-width: 1px;                   -fx-border-color: #cbe8ff;                   -fx-background-color: transparent;                   -fx-text-fill: #cbe8ff;" text="LOGIN">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="TRON" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="reg" mnemonicParsing="false" onMouseClicked="#openReg" onMouseEntered="#enterReg" onMouseExited="#exitReg" prefWidth="142.5" style="-fx-border-width: 1px;     -fx-border-color: #cbe8ff;     -fx-background-color: transparent;     -fx-text-fill: #cbe8ff; " text="REGISTER">
+                     <font>
+                        <Font name="TRON" size="12.0" />
+                     </font></Button>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+      <ImageView fitHeight="104.0" fitWidth="447.0" layoutX="177.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@asteroids.PNG" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

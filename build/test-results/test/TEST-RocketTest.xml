@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RocketTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2019-12-19T23:17:14" hostname="Irtazas-MacBook-Pro.local" time="0.106">
+  <properties/>
+  <testcase name="getterTest()" classname="RocketTest" time="0.063"/>
+  <testcase name="constructorTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="collisionHandlerTest()" classname="RocketTest" time="0.002"/>
+  <testcase name="updateGameRightTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="updateGameTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="setFiringAllowedTest()" classname="RocketTest" time="0.002"/>
+  <testcase name="updateThrustTest()" classname="RocketTest" time="0.0"/>
+  <testcase name="setFiringTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="otherDrawObjectTest()" classname="RocketTest" time="0.006"/>
+  <testcase name="collidedTest()" classname="RocketTest" time="0.002"/>
+  <testcase name="setTrustingTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="rotateRightActiveTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="updateGameLeftTest()" classname="RocketTest" time="0.0"/>
+  <testcase name="rotateLeftActiveTest()" classname="RocketTest" time="0.001"/>
+  <testcase name="drawObjectTest()" classname="RocketTest" time="0.002"/>
+  <testcase name="resetTest()" classname="RocketTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

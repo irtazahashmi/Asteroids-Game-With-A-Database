@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">GameObject.java</span></div><h1>GameObject.java</h1><pre class="source lang-java linenums">import java.awt.Graphics2D;
+
+@SuppressWarnings({&quot;PMD.BeanMembersShouldSerialize&quot;, &quot;PMD.AvoidFieldNameMatchingMethodName&quot;,
+        &quot;PMD.AvoidLiteralsInIfCondition&quot;})
+public abstract class GameObject {
+
+    protected Vector position;
+    protected Vector velocity;
+    protected double rotation;
+    protected double radius;
+    private boolean isAlive;
+    private int points;
+
+    /**
+     * The constructor method.
+     * @param position of GameObject
+     * @param velocity of GameObject
+     * @param radius of GameObject
+     * @param points of GameObject
+     */
+<span class="nc" id="L21">    public GameObject(Vector position, Vector velocity, double radius, int points) {</span>
+<span class="nc" id="L22">        this.position = position;</span>
+<span class="nc" id="L23">        this.velocity = velocity;</span>
+<span class="nc" id="L24">        this.radius = radius;</span>
+<span class="nc" id="L25">        this.rotation = 0.0f;</span>
+<span class="nc" id="L26">        this.points = points;</span>
+<span class="nc" id="L27">        this.isAlive = false;</span>
+<span class="nc" id="L28">    }</span>
+
+    public void rotate(double amount) {
+<span class="nc" id="L31">        this.rotation += amount;</span>
+<span class="nc" id="L32">        this.rotation %= Math.PI * 2;</span>
+<span class="nc" id="L33">    }</span>
+
+    public int getPoints() {
+<span class="nc" id="L36">        return points;</span>
+    }
+
+
+    public void isAlive() {
+<span class="nc" id="L41">        this.isAlive = true;</span>
+<span class="nc" id="L42">    }</span>
+
+
+    public Vector getPosition() {
+<span class="nc" id="L46">        return position;</span>
+    }
+
+    public double getRotation() {
+<span class="nc" id="L50">        return rotation;</span>
+    }
+
+    public double getRadius() {
+<span class="nc" id="L54">        return radius;</span>
+    }
+
+    public boolean needsRemoval() {
+<span class="nc" id="L58">        return isAlive;</span>
+    }
+
+    /**
+     * The method updating the game.
+     * @param game current
+     */
+    public void updateGame(Game game) {
+<span class="nc" id="L66">        position.add(velocity);</span>
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (position.axis1 &lt; 0.0f) {</span>
+<span class="nc" id="L69">            position.axis1 += GameScene.SCREEN_SIZE;</span>
+        }
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (position.axis2 &lt; 0.0f) {</span>
+<span class="nc" id="L72">            position.axis2 += GameScene.SCREEN_SIZE;</span>
+        }
+<span class="nc" id="L74">        position.axis1 %= GameScene.SCREEN_SIZE;</span>
+<span class="nc" id="L75">        position.axis2 %= GameScene.SCREEN_SIZE;</span>
+<span class="nc" id="L76">    }</span>
+
+    public boolean collided(GameObject entity) {
+<span class="nc" id="L79">        double radius = entity.getRadius() + getRadius();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        return (position.getDistanceToSquared(entity.position) &lt; radius * radius);</span>
+    }
+
+    public abstract void collisionHandler(Game game, GameObject other);
+
+    public abstract void drawObject(Graphics2D g, Game game);
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

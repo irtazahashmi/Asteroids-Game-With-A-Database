@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane fx:id="anchor" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: radial-gradient(focus-angle 55deg, focus-distance 150%, center 40% 100%, radius 85%, #211721, #151324 75%, #090A0F);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.Homepage">
+   <children>
+      <Label fx:id="controlsDisplay" layoutX="54.0" layoutY="22.0" prefHeight="135.0" prefWidth="100.0" style="-fx-background-color: #cbe8ff;-fx-background-radius:5; -fx-text-fill: #090A2F;-fx-font-size: 11;">
+         <padding>
+            <Insets bottom="7.5" left="7.5" right="7.5" top="7.5" />
+         </padding>
+      </Label>
+      <Button layoutX="201.0" layoutY="363.0" mnemonicParsing="false" onMouseClicked="#clickStart" onMouseEntered="#lightUp" onMouseExited="#darken" prefHeight="45.0" prefWidth="400.0" style="-fx-border-width: 1px;-fx-border-color: #cbe8ff;-fx-background-color: transparent;-fx-text-fill: #cbe8ff; " text="START" />
+      <Pane fx:id="drop" onMouseEntered="#combine" onMouseExited="#fix" prefHeight="40.0" prefWidth="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Pane fx:id="controls" layoutX="7.0" layoutY="-20.0" opacity="01.0" prefHeight="20.0" prefWidth="20.0" onMouseClicked="#displayControls"/>
+            <Pane fx:id="vol" layoutX="7.0" layoutY="-20.0" onMouseClicked="#mute" opacity="01.0" prefHeight="20.0" prefWidth="20.0" />
+            <Pane fx:id="quit" layoutX="7.0" layoutY="-20.0" opacity="1.0" prefHeight="20.0" prefWidth="20.0" />
+            <Pane fx:id="top" prefHeight="5.0" prefWidth="35.0" style="-fx-background-color: #cbe8ff; -fx-background-radius: 2.5" />
+            <Pane fx:id="mid" layoutY="10.0" prefHeight="5.0" prefWidth="35.0" style="-fx-background-color: #cbe8ff; -fx-background-radius: 2.5" />
+            <Pane fx:id="bot" layoutY="20.0" prefHeight="5.0" prefWidth="35.0" style="-fx-background-color: #cbe8ff; -fx-background-radius: 2.5" />
+         </children>
+      </Pane>
+      <ImageView fitHeight="96.0" fitWidth="350.0" layoutX="225.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@asteroids.PNG" />
+         </image>
+      </ImageView>
+      <Button fx:id="highscores" layoutX="201.0" layoutY="286.0" mnemonicParsing="false" onMouseClicked="#clickHighScore" onMouseEntered="#lightUp" onMouseExited="#darken" prefHeight="45.0" prefWidth="400.0" style="-fx-border-width: 1px;-fx-border-color: #cbe8ff;-fx-background-color: transparent;-fx-text-fill: #cbe8ff; " text="VIEW HIGHSCORES" />
+      <TextField fx:id="nickname" layoutX="203.0" layoutY="183.0" prefHeight="45.0" prefWidth="400.0" promptText="ENTER NICKNAME" style="             -fx-background-color: transparent;             -fx-border-color: #cbe8ff;             -fx-border-width: 0 0 1 0;             -fx-text-fill: #cbe8ff;             -fx-font-size: 11;"/>
+   </children>
+</AnchorPane>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Asteroid.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Asteroid.java</span></div><h1>Asteroid.java</h1><pre class="source lang-java linenums">import java.awt.Graphics2D;
+import java.util.Random;
+
+@SuppressWarnings({&quot;PMD.DataflowAnomalyAnalysis&quot;, &quot;PMD.MissingSerialVersionUID&quot;})
+public class Asteroid extends GameObject {
+
+    private static final double MINIMUM_ROTATION = 0.0075;
+    private static final double MAXIMUM_ROTATION = 0.0175;
+    private static final double DIFFERENCE_IN_ROTATION = MAXIMUM_ROTATION - MINIMUM_ROTATION;
+    private static final double MINIMUM_VELOCITY = 0.8;
+    private static final double MAXIMUM_VELOCITY = 2;
+    private static final double VELOCITY_DIFFERENCE = MAXIMUM_VELOCITY - MINIMUM_VELOCITY;
+    private static final double MINIMUM_DISTANCE = 200.0;
+    private static final double MAXIMUM_DISTANCE = GameScene.SCREEN_SIZE / 2.0;
+    private static final double DISTANCE_DIFFERENCE = MAXIMUM_DISTANCE - MINIMUM_DISTANCE;
+    private static final float SPAWN_UPDATES = 10;
+
+    private transient SizeOfAsteroid size;
+    private transient double rotationSpeed;
+
+    /**
+     * Asteroid constructor.
+     * @param random value
+     */
+    public Asteroid(Random random) {
+<span class="nc" id="L26">        super(calculatePosition(random), calculateVelocity(random),</span>
+                SizeOfAsteroid.LargeAsteroid.radius, SizeOfAsteroid.LargeAsteroid.points);
+<span class="nc" id="L28">        this.rotationSpeed = -MINIMUM_ROTATION + (random.nextDouble() * DIFFERENCE_IN_ROTATION);</span>
+<span class="nc" id="L29">        this.size = SizeOfAsteroid.LargeAsteroid;</span>
+<span class="nc" id="L30">    }</span>
+
+    /**
+     * The constructor creating new asteroid form a parent.
+     * @param parent of asteroid
+     * @param size of asteroid
+     * @param random of asteroid
+     */
+    public Asteroid(Asteroid parent, SizeOfAsteroid size, Random random) {
+<span class="nc" id="L39">        super(new Vector(parent.position), calculateVelocity(random), size.radius, size.points);</span>
+<span class="nc" id="L40">        this.rotationSpeed = MINIMUM_ROTATION + (random.nextDouble() * DIFFERENCE_IN_ROTATION);</span>
+<span class="nc" id="L41">        this.size = size;</span>
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        for (int i = 0; i &lt; SPAWN_UPDATES; i++) {</span>
+<span class="nc" id="L44">            updateGame(null);</span>
+        }
+<span class="nc" id="L46">    }</span>
+
+    private static Vector calculatePosition(Random random) {
+<span class="nc" id="L49">        Vector vec = new Vector(GameScene.SCREEN_SIZE / 2.0, GameScene.SCREEN_SIZE / 2.0);</span>
+<span class="nc" id="L50">        return vec.add(new Vector(random.nextDouble() * Math.PI * 2)</span>
+<span class="nc" id="L51">                .scaleBy(MINIMUM_DISTANCE + random.nextDouble() * DISTANCE_DIFFERENCE));</span>
+    }
+
+
+    private static Vector calculateVelocity(Random random) {
+<span class="nc" id="L56">        return new Vector(random.nextDouble() * Math.PI * 2)</span>
+<span class="nc" id="L57">                .scaleBy(MINIMUM_VELOCITY + random.nextDouble() * VELOCITY_DIFFERENCE);</span>
+    }
+
+
+    @Override
+    public void updateGame(Game game) {
+<span class="nc" id="L63">        super.updateGame(game);</span>
+<span class="nc" id="L64">        rotate(rotationSpeed);</span>
+<span class="nc" id="L65">    }</span>
+
+    @Override
+    public void drawObject(Graphics2D graphics2D, Game game) {
+<span class="nc" id="L69">        graphics2D.drawPolygon(size.polygon);</span>
+<span class="nc" id="L70">        graphics2D.fillPolygon(size.polygon);</span>
+<span class="nc" id="L71">    }</span>
+
+    @Override
+    public void collisionHandler(Game game, GameObject other) {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (other.getClass() != Asteroid.class) {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (size != SizeOfAsteroid.SmallAsteroid) {</span>
+<span class="nc" id="L77">                SizeOfAsteroid spawnSize = SizeOfAsteroid.values()[size.ordinal() - 1];</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L80">                    game.registerEntity(new Asteroid(this, spawnSize, game.getRandom()));</span>
+                }
+            }
+
+<span class="nc" id="L84">            isAlive();</span>
+
+<span class="nc" id="L86">            game.addScore(getPoints());</span>
+        }
+<span class="nc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

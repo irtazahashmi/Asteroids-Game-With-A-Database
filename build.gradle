@@ -1,0 +1,132 @@
+import com.github.spotbugs.SpotBugsTask
+
+
+buildscript {
+    repositories {
+        maven {
+            setUrl("https://plugins.gradle.org/m2/")
+        }
+    }
+    dependencies {
+        classpath("org.openjfx:javafx-plugin:0.0.8")
+    }
+}
+plugins {
+    id 'java'
+//    id 'eclipse' // optional (to generate Eclipse project files)
+//    id 'idea' // optional (to generate IntelliJ IDEA project files)
+
+    // Test coverage
+    id 'jacoco'
+
+    // Code style
+    id 'checkstyle'
+
+    // PMD
+    id 'pmd'
+
+    // FindBugs / SpotBugs
+    id "com.github.spotbugs" version "2.0.1"
+
+    //javafx
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+
+
+group 'nl.tudelft.cse.sem.template'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation('org.postgresql:postgresql')
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+//    implementation("org.openjfx:javafx-graphics:12")
+//    implementation("org.openjfx:javafx-controls:11")
+//    implementation("org.openjfx:javafx-fxml:11")
+
+
+}
+
+
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            excludes = [
+                    '*/gui/*'
+            ]
+            limit {
+                minimum = 0.2
+            }
+        }
+    }
+}
+
+dependencies {
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.10.0'
+}
+
+checkstyle {
+    toolVersion "8.25"
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+}
+
+pmd {
+    incrementalAnalysis = true
+}
+
+javafx {
+    version = "11.0.2"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.base']
+}
+
+spotbugs {
+    sourceSets = [sourceSets.main]
+    ignoreFailures = false
+    effort = "default"
+    reportLevel = "high"
+    visitors = ["FindSqlInjection", "SwitchFallthrough"]
+    excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
+}
+
+tasks.withType(SpotBugsTask) {
+    reports.xml.enabled = false
+    reports.html.enabled = true
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+apply plugin: 'application'
+apply plugin: "org.openjfx.javafxplugin"
+
+
+application {
+    mainClassName = 'gui.controllers.Main'
+}

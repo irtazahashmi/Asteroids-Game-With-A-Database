@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: radial-gradient(focus-angle 55deg, focus-distance 150%, center 40% 100%, radius 85%, #211721, #151324 75%, #090A0F);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.Register">
+    <children>
+        <Label id="title" alignment="CENTER" layoutX="250.0" layoutY="37.0" prefHeight="34.0" prefWidth="300.0" text=" ASTEROIDS" textAlignment="CENTER" textFill="#cbe8ff">
+            <font>
+                <Font name="TRON" size="29.0" />
+            </font></Label>
+        <VBox layoutX="250.0" layoutY="178.0" prefHeight="200.0" prefWidth="300.0">
+            <children>
+                <TextField fx:id="user" promptText="USERNAME" style="-fx-background-color: transparent;-fx-border-color: #cbe8ff;-fx-border-width: 0 0 1 0;-fx-text-fill: #cbe8ff;-fx-font-size: 11;">
+                    <VBox.margin>
+                        <Insets bottom="30.0" />
+                    </VBox.margin>
+                </TextField>
+                <PasswordField fx:id="pass" promptText="PASSWORD" style="-fx-background-color: transparent;-fx-border-color: #cbe8ff;-fx-border-width: 0 0 1 0;-fx-text-fill: #cbe8ff;-fx-font-size: 11;">
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+                </PasswordField>
+            <PasswordField fx:id="confpass" layoutX="15.0" layoutY="45.0" promptText="CONFIRM PASSWORD" style="-fx-background-color: transparent;-fx-border-color: #cbe8ff;-fx-border-width: 0 0 1 0;-fx-text-fill: #cbe8ff;-fx-font-size: 11;">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </PasswordField>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button fx:id="reg" mnemonicParsing="false" onMouseClicked="#register" prefHeight="100.0" prefWidth="300.0" onMouseEntered="#lightUp" onMouseExited="#darken" style="-fx-border-width: 1px;-fx-border-color: #cbe8ff;-fx-background-color: transparent;-fx-text-fill: #cbe8ff; " text="REGISTER">
+                            <font>
+                                <Font name="TRON" size="12.0" />
+                            </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Button>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </VBox>
+      <Label fx:id="warning" layoutX="550.0" layoutY="227.0" prefHeight="45.0" prefWidth="229.0" style="-fx-background-color: #cbe8ff;-fx-background-radius:5; -fx-text-fill: #090A2F;-fx-font-size: 11;">
+         <padding>
+            <Insets bottom="7.5" left="7.5" right="7.5" top="7.5" />
+         </padding></Label>
+      <Label fx:id="warning2" layoutX="115.0" layoutY="271.0" prefHeight="20.0" prefWidth="135.0" style="-fx-background-color: #cbe8ff;-fx-background-radius:5; -fx-text-fill: #090A2F;-fx-font-size: 11;">
+         <padding>
+            <Insets bottom="7.5" left="7.5" right="7.5" top="7.5" />
+         </padding>
+      </Label>
+      <Label fx:id="warning3" layoutX="21.0" layoutY="169.0" prefHeight="45.0" prefWidth="229.0" style="-fx-background-color: #cbe8ff;-fx-background-radius:5; -fx-text-fill: #090A2F;-fx-font-size: 11;">
+         <padding>
+            <Insets bottom="7.5" left="7.5" right="7.5" top="7.5" />
+         </padding>
+      </Label>
+      <Label fx:id="controlsDisplay" layoutX="54.0" layoutY="22.0" prefHeight="135.0" prefWidth="100.0" style="-fx-background-color: #cbe8ff;-fx-background-radius:5; -fx-text-fill: #090A2F;-fx-font-size: 11;">
+         <padding>
+            <Insets bottom="7.5" left="7.5" right="7.5" top="7.5" />
+         </padding>
+      </Label>
+    </children>
+   <children>
+       <Pane fx:id="drop" onMouseEntered="#combine" onMouseExited="#fix" prefHeight="40.0" prefWidth="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+           <children>
+               <Pane fx:id="controls" layoutX="7.0" layoutY="-20.0" opacity="01.0" prefHeight="20.0" prefWidth="20.0" onMouseClicked="#displayControls"/>
+               <Pane fx:id="vol" layoutX="7.0" layoutY="-20.0" onMouseClicked="#mute" opacity="01.0" prefHeight="20.0" prefWidth="20.0" />
+               <Pane fx:id="quit" layoutX="7.0" layoutY="-20.0" onMouseClicked="#goBack" opacity="1.0" prefHeight="20.0" prefWidth="20.0" />
+               <Pane fx:id="top" prefHeight="5.0" prefWidth="35.0" style="-fx-background-color: #cbe8ff; -fx-background-radius: 2.5" />
+               <Pane fx:id="mid" layoutY="10.0" prefHeight="5.0" prefWidth="35.0" style="-fx-background-color: #cbe8ff; -fx-background-radius: 2.5" />
+               <Pane fx:id="bot" layoutY="20.0" prefHeight="5.0" prefWidth="35.0" style="-fx-background-color: #cbe8ff; -fx-background-radius: 2.5" />
+           </children>
+       </Pane>
+       <ImageView fitHeight="40.0" fitWidth="307.0" layoutX="277.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+           <image>
+               <Image url="@asteroids.PNG" />
+           </image>
+       </ImageView>
+   </children>
+</AnchorPane>

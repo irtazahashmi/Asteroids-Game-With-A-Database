@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Missle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Missle.java</span></div><h1>Missle.java</h1><pre class="source lang-java linenums">import java.awt.Graphics2D;
+
+public class Missle extends GameObject {
+
+    private static final double VELOCITY = 7.0;
+
+    private static final int RANGE = 65;
+
+    private int range;
+
+    public Missle(GameObject owner, double angle) {
+<span class="nc" id="L12">        super(new Vector(owner.position), new Vector(angle).scaleBy(VELOCITY), 2.0, 0);</span>
+<span class="nc" id="L13">        this.range = RANGE;</span>
+<span class="nc" id="L14">    }</span>
+
+    @Override
+    public void updateGame(Game game) {
+<span class="nc" id="L18">        super.updateGame(game);</span>
+
+<span class="nc" id="L20">        this.range--;</span>
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (range &lt;= 0) {</span>
+<span class="nc" id="L22">            isAlive();</span>
+        }
+<span class="nc" id="L24">    }</span>
+
+    @Override
+    public void collisionHandler(Game game, GameObject other) {
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (other.getClass() != Rocket.class) {</span>
+<span class="nc" id="L29">            isAlive();</span>
+        }
+<span class="nc" id="L31">    }</span>
+
+    @Override
+    public void drawObject(Graphics2D graphics2D, Game game) {
+<span class="nc" id="L35">        graphics2D.drawOval(-1, -1, 2, 2);</span>
+<span class="nc" id="L36">    }</span>
+
+    public int getRange() {
+<span class="nc" id="L39">        return range;</span>
+    }
+
+    public void setRange(int range) {
+<span class="nc" id="L43">        this.range = range;</span>
+<span class="nc" id="L44">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

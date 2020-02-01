@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+@SuppressWarnings({&quot;PMD.MissingSerialVersionUID&quot;, &quot;PMD.BeanMembersShouldSerialize&quot;,
+        &quot;PMD.DataflowAnomalyAnalysis&quot;})
+public class Game extends JFrame {
+
+    private static final int FRAMES_PER_SECOND = 60;
+
+    private static final long FRAME_TIME = (long)(1000000000.0 / FRAMES_PER_SECOND);
+
+    private static final int MAXIMUM_LEVEL = 100;
+
+    private static final int TIME_AFTER_DEATH = 200;
+
+    private static final int TIME_FOR_RESPAWNING = 100;
+
+    private static final int TIME_OF_BEING_INVULNERABLE_AFTER_DEATH = 0;
+
+    private static final int RESET_TIME = 120;
+
+    private static final int INCREASE_ASTEROIDS_BY = 3;
+
+    private GameScene gameScene;
+
+    private TimeHandler timeHandler;
+
+    private Random random;
+
+    private List&lt;GameObject&gt; existingObjects;
+
+    List&lt;GameObject&gt; nonExistingObjects;
+
+    private Rocket player;
+
+    private int deathTime;
+
+    private int showLevelNumberTime;
+
+    private int restartTime;
+
+    private int score;
+
+    private int lives;
+
+    private int level;
+
+    private boolean isGameOver;
+
+    private boolean restartGame;
+
+    public void addScore(int score) {
+<span class="nc" id="L66">        this.score += score;</span>
+<span class="nc" id="L67">    }</span>
+
+    public void registerEntity(GameObject entity) {
+<span class="nc" id="L70">        nonExistingObjects.add(entity);</span>
+<span class="nc" id="L71">    }</span>
+
+    public boolean checkGameOver() {
+<span class="nc" id="L74">        return isGameOver;</span>
+    }
+
+    public boolean isPlayerInvulnerable() {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        return (deathTime &gt; TIME_OF_BEING_INVULNERABLE_AFTER_DEATH);</span>
+    }
+
+    public boolean canDrawPlayer() {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        return (deathTime &lt;= TIME_FOR_RESPAWNING);</span>
+    }
+
+    public int getScore() {
+<span class="nc" id="L86">        return score;</span>
+    }
+
+    public int getLives() {
+<span class="nc" id="L90">        return lives;</span>
+    }
+
+    public int getLevel() {
+<span class="nc" id="L94">        return level;</span>
+    }
+
+    public boolean isPaused() {
+<span class="nc" id="L98">        return timeHandler.isPaused();</span>
+    }
+
+    public boolean isShowingLevel() {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        return (showLevelNumberTime &gt; 0);</span>
+    }
+
+    public Random getRandom() {
+<span class="nc" id="L106">        return random;</span>
+    }
+
+    public List&lt;GameObject&gt; getExistingObjects() {
+<span class="nc" id="L110">        return existingObjects;</span>
+    }
+
+    public Rocket getPlayer() {
+<span class="nc" id="L114">        return player;</span>
+    }
+
+    public static void main(String[] args) {
+<span class="nc" id="L118">        Game game = new Game();</span>
+<span class="nc" id="L119">        game.startGame();</span>
+<span class="nc" id="L120">    }</span>
+
+    /**
+     * Game constructor.
+     */
+    public Game() {
+<span class="nc" id="L126">        super(&quot;Asteroids Game by Group 59&quot;);</span>
+<span class="nc" id="L127">        setLayout(new BorderLayout());</span>
+<span class="nc" id="L128">        setDefaultCloseOperation(EXIT_ON_CLOSE);</span>
+<span class="nc" id="L129">        setResizable(false);</span>
+
+<span class="nc" id="L131">        add(this.gameScene = new GameScene(this), BorderLayout.CENTER);</span>
+
+<span class="nc" id="L133">        setGameControls();</span>
+<span class="nc" id="L134">        playSoundEffect(&quot;backgroundMusic.wav&quot;);</span>
+
+<span class="nc" id="L136">        pack();</span>
+<span class="nc" id="L137">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L138">        setVisible(true);</span>
+<span class="nc" id="L139">    }</span>
+
+    private void playSoundEffect(String filepath) {
+        try {
+<span class="nc" id="L143">            AudioInputStream audioInputStream = AudioSystem</span>
+<span class="nc" id="L144">                    .getAudioInputStream(new File(filepath));</span>
+<span class="nc" id="L145">            Clip clip = AudioSystem.getClip();</span>
+<span class="nc" id="L146">            clip.open(audioInputStream);</span>
+<span class="nc" id="L147">            clip.start();</span>
+<span class="nc" id="L148">            clip.loop(Clip.LOOP_CONTINUOUSLY);</span>
+
+
+<span class="nc" id="L151">        } catch (Exception e) {</span>
+<span class="nc" id="L152">            JOptionPane.showMessageDialog(null,</span>
+                    &quot;Help, can't music file!&quot;);
+<span class="nc" id="L154">        }</span>
+<span class="nc" id="L155">    }</span>
+
+    private void playMissleSoundEffect(String filepath) {
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        if (player.isFiringAllowed()) {</span>
+            try {
+<span class="nc" id="L160">                AudioInputStream audioInputStream = AudioSystem</span>
+<span class="nc" id="L161">                        .getAudioInputStream(new File(filepath));</span>
+<span class="nc" id="L162">                Clip clip = AudioSystem.getClip();</span>
+<span class="nc" id="L163">                clip.open(audioInputStream);</span>
+<span class="nc" id="L164">                clip.start();</span>
+<span class="nc" id="L165">                clip.start();</span>
+
+<span class="nc" id="L167">            } catch (Exception e) {</span>
+<span class="nc" id="L168">                JOptionPane.showMessageDialog(null,</span>
+                        &quot;Help, can't find music file!&quot;);
+<span class="nc" id="L170">            }</span>
+        }
+<span class="nc" id="L172">    }</span>
+
+    private void setGameControls() {
+<span class="nc" id="L175">        addKeyListener(new KeyAdapter() {</span>
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+<span class="nc bnc" id="L179" title="All 6 branches missed.">                switch (e.getKeyCode()) {</span>
+
+                    case KeyEvent.VK_W:
+<span class="nc bnc" id="L182" title="All 2 branches missed.">                        if (!checkForRestart()) {</span>
+<span class="nc" id="L183">                            player.setThrusting(true);</span>
+                        }
+                        break;
+
+                    case KeyEvent.VK_A:
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                        if (!checkForRestart()) {</span>
+<span class="nc" id="L189">                            player.setRotateLeft(true);</span>
+                        }
+                        break;
+
+                    case KeyEvent.VK_D:
+<span class="nc bnc" id="L194" title="All 2 branches missed.">                        if (!checkForRestart()) {</span>
+<span class="nc" id="L195">                            player.setRotateRight(true);</span>
+                        }
+                        break;
+
+                    case KeyEvent.VK_SPACE:
+<span class="nc bnc" id="L200" title="All 2 branches missed.">                        if (!checkForRestart()) {</span>
+<span class="nc" id="L201">                            player.setFiring(true);</span>
+<span class="nc" id="L202">                            playMissleSoundEffect(&quot;gunShot.wav&quot;);</span>
+                        }
+                        break;
+
+                        //pausing the game
+                    case KeyEvent.VK_P:
+<span class="nc bnc" id="L208" title="All 2 branches missed.">                        if (!checkForRestart()) {</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                            timeHandler.setPaused(!timeHandler.isPaused());</span>
+                        }
+                        break;
+
+                    default:
+<span class="nc" id="L214">                        checkForRestart();</span>
+                        break;
+
+                }
+<span class="nc" id="L218">            }</span>
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+<span class="nc bnc" id="L222" title="All 5 branches missed.">                switch (e.getKeyCode()) {</span>
+
+                    case KeyEvent.VK_W:
+<span class="nc" id="L225">                        player.setThrusting(false);</span>
+<span class="nc" id="L226">                        break;</span>
+
+                    case KeyEvent.VK_A:
+<span class="nc" id="L229">                        player.setRotateLeft(false);</span>
+<span class="nc" id="L230">                        break;</span>
+
+                    case KeyEvent.VK_D:
+<span class="nc" id="L233">                        player.setRotateRight(false);</span>
+<span class="nc" id="L234">                        break;</span>
+
+                    case KeyEvent.VK_SPACE:
+<span class="nc" id="L237">                        player.setFiring(false);</span>
+<span class="nc" id="L238">                        break;</span>
+
+                    default:
+                }
+<span class="nc" id="L242">            }</span>
+        });
+<span class="nc" id="L244">    }</span>
+
+    private boolean checkForRestart() {
+<span class="nc bnc" id="L247" title="All 4 branches missed.">        boolean restart = (isGameOver &amp;&amp; restartTime &lt;= 0);</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        if (restart) {</span>
+<span class="nc" id="L249">            restartGame = true;</span>
+        }
+<span class="nc" id="L251">        return restart;</span>
+    }
+
+    private void startGame() {
+<span class="nc" id="L255">        this.random = new Random();</span>
+<span class="nc" id="L256">        this.existingObjects = new CopyOnWriteArrayList&lt;&gt;();</span>
+<span class="nc" id="L257">        this.nonExistingObjects = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L258">        this.player = new Rocket();</span>
+
+<span class="nc" id="L260">        resetGame();</span>
+
+<span class="nc" id="L262">        this.timeHandler = new TimeHandler(FRAMES_PER_SECOND);</span>
+        while (true) {
+<span class="nc" id="L264">            timeHandler.update();</span>
+<span class="nc bnc" id="L265" title="All 4 branches missed.">            for (int i = 0; i &lt; 5 &amp;&amp; timeHandler.isCycleGone(); i++) {</span>
+<span class="nc" id="L266">                updateGame();</span>
+            }
+
+<span class="nc" id="L269">            gameScene.repaint();</span>
+
+<span class="nc" id="L271">            long startTime = System.nanoTime();</span>
+<span class="nc" id="L272">            long changeInTime = FRAME_TIME - (System.nanoTime() - startTime);</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">            if (changeInTime &gt; 0) {</span>
+                try {
+<span class="nc" id="L275">                    Thread.sleep(changeInTime / 1000000L, (int) changeInTime % 1000000);</span>
+<span class="nc" id="L276">                } catch (Exception e) {</span>
+<span class="nc" id="L277">                    e.printStackTrace();</span>
+<span class="nc" id="L278">                }</span>
+            }
+<span class="nc" id="L280">        }</span>
+    }
+
+    private void updateGame() {
+<span class="nc" id="L284">        existingObjects.addAll(nonExistingObjects);</span>
+<span class="nc" id="L285">        nonExistingObjects.clear();</span>
+
+<span class="nc bnc" id="L287" title="All 2 branches missed.">        if (restartTime &gt; 0) {</span>
+<span class="nc" id="L288">            this.restartTime--;</span>
+        }
+
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        if (showLevelNumberTime &gt; 0) {</span>
+<span class="nc" id="L292">            this.showLevelNumberTime--;</span>
+        }
+
+<span class="nc bnc" id="L295" title="All 4 branches missed.">        if (isGameOver &amp;&amp; restartGame) {</span>
+<span class="nc" id="L296">            resetGame();</span>
+        }
+
+<span class="nc bnc" id="L299" title="All 4 branches missed.">        if (!isGameOver &amp;&amp; areAllAsteroidsDestroyed()) {</span>
+<span class="nc" id="L300">            this.level++;</span>
+<span class="nc" id="L301">            this.showLevelNumberTime = MAXIMUM_LEVEL;</span>
+
+<span class="nc" id="L303">            resetGameObjectList();</span>
+
+<span class="nc" id="L305">            player.reset();</span>
+<span class="nc" id="L306">            player.setFiringAllowed(true);</span>
+
+<span class="nc bnc" id="L308" title="All 2 branches missed.">            for (int i = 0; i &lt; level + INCREASE_ASTEROIDS_BY; i++) {</span>
+<span class="nc" id="L309">                registerEntity(new Asteroid(random));</span>
+            }
+        }
+
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        if (deathTime &gt; 0) {</span>
+<span class="nc" id="L314">            this.deathTime--;</span>
+<span class="nc bnc" id="L315" title="All 3 branches missed.">            switch (deathTime) {</span>
+
+                case TIME_FOR_RESPAWNING:
+<span class="nc" id="L318">                    player.reset();</span>
+<span class="nc" id="L319">                    player.setFiringAllowed(false);</span>
+<span class="nc" id="L320">                    break;</span>
+
+                case TIME_OF_BEING_INVULNERABLE_AFTER_DEATH:
+<span class="nc" id="L323">                    player.setFiringAllowed(true);</span>
+<span class="nc" id="L324">                    break;</span>
+                default:
+            }
+        }
+
+
+<span class="nc bnc" id="L330" title="All 2 branches missed.">        if (showLevelNumberTime == 0) {</span>
+
+<span class="nc bnc" id="L332" title="All 2 branches missed.">            for (GameObject entity : existingObjects) {</span>
+<span class="nc" id="L333">                entity.updateGame(this);</span>
+<span class="nc" id="L334">            }</span>
+
+<span class="nc bnc" id="L336" title="All 2 branches missed.">            for (int i = 0; i &lt; existingObjects.size(); i++) {</span>
+<span class="nc" id="L337">                GameObject a = existingObjects.get(i);</span>
+<span class="nc bnc" id="L338" title="All 2 branches missed.">                for (int j = i + 1; j &lt; existingObjects.size(); j++) {</span>
+<span class="nc" id="L339">                    GameObject b = existingObjects.get(j);</span>
+<span class="nc bnc" id="L340" title="All 6 branches missed.">                    if (i != j &amp;&amp; a.collided(b) &amp;&amp; ((!a.equals(player)</span>
+<span class="nc bnc" id="L341" title="All 4 branches missed.">                            &amp;&amp; !(b.equals(player)))</span>
+                            || deathTime &lt;= TIME_OF_BEING_INVULNERABLE_AFTER_DEATH)) {
+<span class="nc" id="L343">                        a.collisionHandler(this, b);</span>
+<span class="nc" id="L344">                        b.collisionHandler(this, a);</span>
+                    }
+                }
+            }
+
+<span class="nc" id="L349">            existingObjects.removeIf(GameObject::needsRemoval);</span>
+        }
+<span class="nc" id="L351">    }</span>
+
+    private void resetGame() {
+<span class="nc" id="L354">        this.score = 0;</span>
+<span class="nc" id="L355">        this.level = 0;</span>
+<span class="nc" id="L356">        this.lives = 3;</span>
+<span class="nc" id="L357">        this.deathTime = 0;</span>
+<span class="nc" id="L358">        this.isGameOver = false;</span>
+<span class="nc" id="L359">        this.restartGame = false;</span>
+<span class="nc" id="L360">        resetGameObjectList();</span>
+<span class="nc" id="L361">    }</span>
+
+    private void resetGameObjectList() {
+<span class="nc" id="L364">        nonExistingObjects.clear();</span>
+<span class="nc" id="L365">        existingObjects.clear();</span>
+<span class="nc" id="L366">        existingObjects.add(player);</span>
+<span class="nc" id="L367">    }</span>
+
+    private boolean areAllAsteroidsDestroyed() {
+<span class="nc bnc" id="L370" title="All 2 branches missed.">        for (GameObject e : existingObjects) {</span>
+<span class="nc bnc" id="L371" title="All 2 branches missed.">            if (e.getClass() == Asteroid.class) {</span>
+<span class="nc" id="L372">                return false;</span>
+            }
+<span class="nc" id="L374">        }</span>
+<span class="nc" id="L375">        return true;</span>
+    }
+
+    /**
+     * The method reducing the lives of player and checking the game
+     * is over or not.
+     */
+    public void playerDies() {
+<span class="nc" id="L383">        this.lives--;</span>
+
+<span class="nc bnc" id="L385" title="All 2 branches missed.">        if (lives == 0) {</span>
+<span class="nc" id="L386">            this.isGameOver = true;</span>
+<span class="nc" id="L387">            this.restartTime = RESET_TIME;</span>
+<span class="nc" id="L388">            this.deathTime = Integer.MAX_VALUE;</span>
+        } else {
+<span class="nc" id="L390">            this.deathTime = TIME_AFTER_DEATH;</span>
+        }
+
+<span class="nc" id="L393">        player.setFiringAllowed(false);</span>
+<span class="nc" id="L394">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

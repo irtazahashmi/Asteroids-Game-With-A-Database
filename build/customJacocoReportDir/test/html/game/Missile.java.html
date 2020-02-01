@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Missile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Missile.java</span></div><h1>Missile.java</h1><pre class="source lang-java linenums">package game;
+
+import java.awt.Graphics2D;
+
+/**
+ * The missile class.
+ */
+public class Missile extends GameObject {
+
+    /**
+     * The velocity of the missile.
+     */
+    private static final double VELOCITY = 7.0;
+
+    /**
+     * The range of the missile.
+     */
+    private static final int RANGE = 65;
+
+    /**
+     * The range of the missile.
+     */
+    private int range;
+
+    /**
+     * Missile constructor.
+     * @param player the player of the game.
+     * @param angle the angle the missile is shot at.
+     */
+    public Missile(GameObject player, double angle) {
+<span class="fc" id="L31">        super(new Vector(player.position), new Vector(angle).scaleBy(VELOCITY), 2.0, 0);</span>
+<span class="fc" id="L32">        this.range = RANGE;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Update the game.
+     * @param game current game.
+     */
+    @Override
+    public void updateGame(Game game) {
+<span class="fc" id="L41">        super.updateGame(game);</span>
+
+<span class="fc" id="L43">        this.range--;</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (range &lt;= 0) {</span>
+<span class="fc" id="L45">            isAlive();</span>
+        }
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Handle collisions.
+     * @param game current game.
+     * @param other object to collide with.
+     */
+    @Override
+    public void collisionHandler(Game game, GameObject other) {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (other.getClass() != Rocket.class) {</span>
+<span class="fc" id="L57">            isAlive();</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * Draw the missile object.
+     * @param graphics2D current graphics to paint it.
+     * @param game current game.
+     */
+    @Override
+    public void drawObject(Graphics2D graphics2D, Game game) {
+<span class="fc" id="L68">        graphics2D.drawOval(-1, -1, 2, 2);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Get the range of the missile.
+     * @return the range.
+     */
+    public int getRange() {
+<span class="fc" id="L76">        return range;</span>
+    }
+
+    /**
+     * Set the range of the missile.
+     */
+    public void setRange(int range) {
+<span class="fc" id="L83">        this.range = range;</span>
+<span class="fc" id="L84">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

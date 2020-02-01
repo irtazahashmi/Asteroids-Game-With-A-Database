@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rocket.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Rocket.java</span></div><h1>Rocket.java</h1><pre class="source lang-java linenums">package game;
+
+import gui.GameScene;
+
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * The roocket (player) class.
+ */
+@SuppressWarnings({&quot;PMD.BeanMembersShouldSerialize&quot;, &quot;PMD.AvoidLiteralsInIfCondition&quot;})
+public class Rocket extends GameObject {
+
+    /**
+     * The rotation of the rocket.
+     */
+    private static final double ROTATION = -Math.PI / 2.0;
+
+    /**
+     * The thrust of the rocket.
+     */
+    private static final double THRUST = 0.06;
+
+    /**
+     * The maximum velocity of the rocket.
+     */
+    private static final double MAXIMUM_VELOCITY = 6.5;
+
+    /**
+     * The maximum speed of the rocket.
+     */
+    private static final double MAXIMUM_ROTATION_SPEED = 0.05;
+    /**
+     * The deacceleration speed of the rocket.
+     */
+    private static final double DEACCELERATION = 0.99;
+    /**
+     * The maximum number of missiles the rocket can fire at once.
+     */
+    private static final int MAXIMUM_MISSILES = 5;
+
+    /**
+     * The maximum number of missiles the rocket can fire at consecutively.
+     */
+    private static final int FIRE_RATE = 5;
+
+    /**
+     * The maximum number of missiles the rocket can fire at consecutively.
+     */
+    private static final int MAXIMUM_CONSECUTIVE_SHOTS = 5;
+
+    /**
+     * The time that the rocket needs to cool down once shot 5
+     * consecutive missiles.
+     */
+    private static final int OVERHEAT_TIME = 30;
+
+    /**
+     * Is the thrust active.
+     */
+    private boolean thrustActive;
+    /**
+     * Is left rotation active.
+     */
+    private boolean rotateLeftActive;
+    /**
+     * Is right rotation active.
+     */
+    private boolean rotateRightActive;
+    /**
+     * Is fire active.
+     */
+    private boolean fireActive;
+    /**
+     * Is firing allowed.
+     */
+    private boolean firingAllowed;
+
+    /**
+     * Number of consecutive shots.
+     */
+    private int consecutiveShots;
+    /**
+     * Cooldown time.
+     */
+    private int fireCooldown;
+    /**
+     * Overheat cool down time.
+     */
+    private int overheatCooldownTime;
+    /**
+     * Animation frame for the thrust when thrust is active.
+     */
+    private int animationFrame;
+
+    /**
+     * List of missiles the rocket can shoot.
+     */
+    private List&lt;Missile&gt; missiles;
+
+    /**
+     * The constructor method.
+     */
+    public Rocket() {
+<span class="fc" id="L107">        super(new Vector(GameScene.SCREEN_SIZE / 2.0, GameScene.SCREEN_SIZE / 2.0),</span>
+                new Vector(0.0, 0.0), 10.0, 0);
+<span class="fc" id="L109">        this.missiles = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L110">        this.rotation = ROTATION;</span>
+<span class="fc" id="L111">        this.thrustActive = false;</span>
+<span class="fc" id="L112">        this.rotateLeftActive = false;</span>
+<span class="fc" id="L113">        this.rotateRightActive = false;</span>
+<span class="fc" id="L114">        this.fireActive = false;</span>
+<span class="fc" id="L115">        this.firingAllowed = true;</span>
+<span class="fc" id="L116">        this.fireCooldown = 0;</span>
+<span class="fc" id="L117">        this.overheatCooldownTime = 0;</span>
+<span class="fc" id="L118">        this.animationFrame = 0;</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * Setter for the thruster.
+     * @param state does or does not have thrusters.
+     */
+    public void setThrusting(boolean state) {
+<span class="fc" id="L126">        this.thrustActive = state;</span>
+<span class="fc" id="L127">    }</span>
+
+    /**
+     * Setter for rotating left.
+     * @param state can or can not rotate left.
+     */
+    public void setRotateLeft(boolean state) {
+<span class="fc" id="L134">        this.rotateLeftActive = state;</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Setter for rotating right.
+     * @param state can or can not rotate right.
+     */
+    public void setRotateRight(boolean state) {
+<span class="fc" id="L142">        this.rotateRightActive = state;</span>
+<span class="fc" id="L143">    }</span>
+
+    /**
+     * Setter for firing.
+     * @param state can or can not fire.
+     */
+    public void setFiring(boolean state) {
+<span class="fc" id="L150">        this.fireActive = state;</span>
+<span class="fc" id="L151">    }</span>
+
+    /**
+     * Setter for firing.
+     * @param state can or can not fire.
+     */
+    public void setFiringAllowed(boolean state) {
+<span class="fc" id="L158">        this.firingAllowed = state;</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * The method resets the game.
+     */
+    public void reset() {
+<span class="fc" id="L165">        this.rotation = ROTATION;</span>
+<span class="fc" id="L166">        position.set(GameScene.SCREEN_SIZE / 2.0, GameScene.SCREEN_SIZE / 2.0);</span>
+<span class="fc" id="L167">        velocity.set(0.0, 0.0);</span>
+<span class="fc" id="L168">        missiles.clear();</span>
+<span class="fc" id="L169">    }</span>
+
+    /**
+     * Update the game.
+     * @param game current game.
+     */
+
+    @Override
+    public void updateGame(Game game) {
+<span class="fc" id="L178">        super.updateGame(game);</span>
+
+<span class="fc" id="L180">        this.animationFrame++;</span>
+
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (rotateLeftActive != rotateRightActive) {</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            rotate(rotateLeftActive ? -MAXIMUM_ROTATION_SPEED : MAXIMUM_ROTATION_SPEED);</span>
+        }
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (thrustActive) {</span>
+<span class="fc" id="L187">            velocity.add(new Vector(rotation).scaleBy(THRUST));</span>
+
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">            if (velocity.getLengthSquared() &gt;= MAXIMUM_VELOCITY * MAXIMUM_VELOCITY) {</span>
+<span class="nc" id="L190">                velocity.normalize().scaleBy(MAXIMUM_VELOCITY);</span>
+            }
+        }
+
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (velocity.getLengthSquared() != 0.0) {</span>
+<span class="fc" id="L195">            velocity.scaleBy(DEACCELERATION);</span>
+        }
+
+
+<span class="fc" id="L199">        Iterator&lt;Missile&gt; iter = missiles.iterator();</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        while (iter.hasNext()) {</span>
+<span class="nc" id="L201">            Missile bullet = iter.next();</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            if (bullet.needsRemoval()) {</span>
+<span class="nc" id="L203">                iter.remove();</span>
+            }
+<span class="nc" id="L205">        }</span>
+
+<span class="fc" id="L207">        this.fireCooldown--;</span>
+<span class="fc" id="L208">        this.overheatCooldownTime--;</span>
+<span class="pc bpc" id="L209" title="6 of 8 branches missed.">        if (firingAllowed &amp;&amp; fireActive &amp;&amp; fireCooldown &lt;= 0 &amp;&amp; overheatCooldownTime &lt;= 0) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (missiles.size() &lt; MAXIMUM_MISSILES) {</span>
+<span class="nc" id="L211">                this.fireCooldown = FIRE_RATE;</span>
+
+<span class="nc" id="L213">                Missile bullet = new Missile(this, rotation);</span>
+<span class="nc" id="L214">                missiles.add(bullet);</span>
+<span class="nc" id="L215">                game.registerEntity(bullet);</span>
+            }
+
+<span class="nc" id="L218">            this.consecutiveShots++;</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">            if (consecutiveShots == MAXIMUM_CONSECUTIVE_SHOTS) {</span>
+<span class="nc" id="L220">                this.consecutiveShots = 0;</span>
+<span class="nc" id="L221">                this.overheatCooldownTime = OVERHEAT_TIME;</span>
+            }
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        } else if (consecutiveShots &gt; 0) {</span>
+<span class="nc" id="L224">            this.consecutiveShots--;</span>
+        }
+<span class="fc" id="L226">    }</span>
+
+
+    /**
+     * Handle collisions.
+     * @param game current game.
+     * @param other the other game object the object collides with.
+     */
+    @Override
+    public void collisionHandler(Game game, GameObject other) {
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (other.getClass() == Asteroid.class) {</span>
+<span class="fc" id="L237">            game.playerDies();</span>
+        }
+<span class="fc" id="L239">    }</span>
+
+
+    /**
+     * Drawing the rocket object.
+     * @param graphics2D the graphics object
+     * @param game the current game
+     */
+    @Override
+    public void drawObject(Graphics2D graphics2D, Game game) {
+
+<span class="pc bpc" id="L250" title="5 of 6 branches missed.">        if (!game.isPlayerInvulnerable() || game.isPaused() || animationFrame % 20 &lt; 10) {</span>
+
+            //main body
+<span class="fc" id="L253">            graphics2D.drawOval(5, -5, 30, 10);</span>
+            //window
+<span class="fc" id="L255">            graphics2D.drawOval(25, -2, 3, 3);</span>
+            //right
+<span class="fc" id="L257">            graphics2D.drawOval(5, 5, 20, 5);</span>
+            //left
+<span class="fc" id="L259">            graphics2D.drawOval(5, -10, 20, 5);</span>
+
+
+            //Fire thrust animation when the rocket is moving
+<span class="pc bpc" id="L263" title="2 of 6 branches missed.">            if (!game.isPaused() &amp;&amp; thrustActive &amp;&amp; animationFrame % 6 &lt; 3) {</span>
+<span class="fc" id="L264">                graphics2D.drawLine(-6, -6, -12, 0);</span>
+<span class="fc" id="L265">                graphics2D.drawLine(-6, 6, -12, 0);</span>
+
+            }
+        }
+<span class="fc" id="L269">    }</span>
+
+    /**
+     * Getter for the missiles.
+     * @return List of missiles.
+     */
+    public List&lt;Missile&gt; getMissiles() {
+<span class="fc" id="L276">        return missiles;</span>
+    }
+
+    /**
+     * Is firing allowed.
+     * @return boolean of whether it is allowed.
+     */
+    public boolean isFiringAllowed() {
+<span class="fc" id="L284">        return firingAllowed;</span>
+    }
+
+    /**
+     * Is firing active.
+     * @return boolean of whether it is active.
+     */
+    public boolean isFireActive() {
+<span class="fc" id="L292">        return fireActive;</span>
+    }
+
+    /**
+     * Is rotating right active.
+     * @return boolean of whether it is active.
+     */
+    public boolean isRotateRightActive() {
+<span class="fc" id="L300">        return rotateRightActive;</span>
+    }
+
+    /**
+     * Is rotating left active.
+     * @return boolean of whether it is active.
+     */
+    public boolean isRotateLeftActive() {
+<span class="fc" id="L308">        return rotateLeftActive;</span>
+    }
+
+    /**
+     * Is thrusters active.
+     * @return boolean of whether it is active.
+     */
+    public boolean isThrustActive() {
+<span class="fc" id="L316">        return thrustActive;</span>
+    }
+
+    public int getAnimationFrame() {
+<span class="fc" id="L320">        return animationFrame;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

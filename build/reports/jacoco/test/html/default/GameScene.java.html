@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameScene.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">GameScene.java</span></div><h1>GameScene.java</h1><pre class="source lang-java linenums">import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+
+@SuppressWarnings({&quot;PMD.DataflowAnomalyAnalysis&quot;, &quot;PMD.MissingSerialVersionUID&quot;,
+        &quot;PMD.BeanMembersShouldSerialize&quot;, &quot;PMD.AvoidLiteralsInIfCondition&quot;})
+public class GameScene extends JPanel {
+
+    public static final int SCREEN_SIZE = 700;
+
+<span class="nc" id="L22">    private static final Font TITLE = new Font(&quot;Dialog&quot;, Font.PLAIN, 35);</span>
+
+<span class="nc" id="L24">    private static final Font HEADER = new Font(&quot;Dialog&quot;, Font.PLAIN, 15);</span>
+
+    private Game game;
+
+
+    /**
+     * The constructor method for GameScene.
+     * @param game current
+     */
+<span class="nc" id="L33">    public GameScene(Game game) {</span>
+<span class="nc" id="L34">        this.game = game;</span>
+<span class="nc" id="L35">        setPreferredSize(new Dimension(SCREEN_SIZE, SCREEN_SIZE));</span>
+<span class="nc" id="L36">        setBackground(new Color(4, 81, 87));</span>
+<span class="nc" id="L37">    }</span>
+
+    @Override
+    public void paintComponent(Graphics graphics) {
+<span class="nc" id="L41">        super.paintComponent(graphics);</span>
+
+<span class="nc" id="L43">        Graphics2D graphics2D = (Graphics2D) graphics;</span>
+<span class="nc" id="L44">        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,</span>
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+<span class="nc" id="L47">        graphics2D.setColor(Color.WHITE);</span>
+
+
+        //background image
+<span class="nc" id="L51">        BufferedImage backgroundImage = null;</span>
+        try {
+<span class="nc" id="L53">            backgroundImage = ImageIO.read(new File(&quot;backgroundImage.png&quot;));</span>
+<span class="nc" id="L54">        } catch (IOException e) {</span>
+<span class="nc" id="L55">            e.printStackTrace();</span>
+<span class="nc" id="L56">        }</span>
+
+<span class="nc" id="L58">        graphics2D.drawImage(backgroundImage, 0, 0, this);</span>
+
+<span class="nc" id="L60">        AffineTransform identity = graphics2D.getTransform();</span>
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for (GameObject entity : game.getExistingObjects()) {</span>
+<span class="nc bnc" id="L63" title="All 4 branches missed.">            if (entity != game.getPlayer() || game.canDrawPlayer()) {</span>
+<span class="nc" id="L64">                Vector position = entity.getPosition();</span>
+
+<span class="nc" id="L66">                drawObjects(graphics2D, entity, position.axis1, position.axis2);</span>
+<span class="nc" id="L67">                graphics2D.setTransform(identity);</span>
+
+<span class="nc" id="L69">                double radius = entity.getRadius();</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">                double x = (position.axis1 &lt; radius) ? position.axis1 + SCREEN_SIZE</span>
+                        : (position.axis1 &gt; SCREEN_SIZE - radius) ? position.axis1
+                        - SCREEN_SIZE : position.axis1;
+<span class="nc bnc" id="L73" title="All 4 branches missed.">                double y = (position.axis2 &lt; radius) ? position.axis2 + SCREEN_SIZE</span>
+                        : (position.axis2 &gt; SCREEN_SIZE - radius) ? position.axis2
+                        - SCREEN_SIZE : position.axis2;
+
+<span class="nc bnc" id="L77" title="All 4 branches missed.">                if (x != position.axis1 || y != position.axis2) {</span>
+<span class="nc" id="L78">                    drawObjects(graphics2D, entity, x, y);</span>
+<span class="nc" id="L79">                    graphics2D.setTransform(identity);</span>
+                }
+            }
+<span class="nc" id="L82">        }</span>
+
+
+<span class="nc" id="L85">        showGameScore(graphics);</span>
+<span class="nc" id="L86">        showGameStatistics(graphics2D);</span>
+<span class="nc" id="L87">        drawLives(graphics2D);</span>
+<span class="nc" id="L88">    }</span>
+
+    private void showGameScore(Graphics graphics) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (!game.checkGameOver()) {</span>
+<span class="nc" id="L92">            graphics.drawString(&quot;Score: &quot; + game.getScore(), 10, 15);</span>
+        }
+<span class="nc" id="L94">    }</span>
+
+
+    private void showGameStatistics(Graphics2D graphics2D) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (game.checkGameOver()) {</span>
+<span class="nc" id="L99">            drawText(&quot;Game Over&quot;, TITLE, graphics2D, -25);</span>
+<span class="nc" id="L100">            drawText(&quot;Final Score: &quot; + game.getScore(), HEADER, graphics2D, 10);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        } else if (game.isPaused()) {</span>
+<span class="nc" id="L102">            drawText(&quot;Game Paused&quot;, TITLE, graphics2D, -25);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        } else if (game.isShowingLevel()) {</span>
+<span class="nc" id="L104">            drawText(&quot;Level: &quot; + game.getLevel(), TITLE, graphics2D, -25);</span>
+        }
+
+<span class="nc" id="L107">        graphics2D.translate(15, 30);</span>
+<span class="nc" id="L108">        graphics2D.scale(0.85, 0.85);</span>
+<span class="nc" id="L109">    }</span>
+
+    private void drawLives(Graphics2D graphics2D) {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (int i = 0; i &lt; game.getLives(); i++) {</span>
+<span class="nc" id="L113">            BufferedImage loadingImage = null;</span>
+            try {
+<span class="nc" id="L115">                loadingImage = ImageIO.read(new File(&quot;rocket.png&quot;));</span>
+<span class="nc" id="L116">            } catch (IOException e) {</span>
+<span class="nc" id="L117">                e.printStackTrace();</span>
+<span class="nc" id="L118">            }</span>
+
+<span class="nc" id="L120">            Image rocket = loadingImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);</span>
+<span class="nc" id="L121">            graphics2D.drawImage(rocket, 0, 0, this);</span>
+<span class="nc" id="L122">            graphics2D.translate(30, 0);</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+
+    private void drawText(String text, Font font, Graphics2D graphics2D, int y) {
+<span class="nc" id="L128">        graphics2D.setFont(font);</span>
+<span class="nc" id="L129">        graphics2D.drawString(text, SCREEN_SIZE / 2 - graphics2D.getFontMetrics()</span>
+<span class="nc" id="L130">                .stringWidth(text) / 2, SCREEN_SIZE / 2 + y);</span>
+<span class="nc" id="L131">    }</span>
+
+    private void drawObjects(Graphics2D graphics2D, GameObject entity, double x, double y) {
+<span class="nc" id="L134">        graphics2D.translate(x, y);</span>
+<span class="nc" id="L135">        double rotation = entity.getRotation();</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (rotation != 0.0f) {</span>
+<span class="nc" id="L137">            graphics2D.rotate(entity.getRotation());</span>
+        }
+<span class="nc" id="L139">        entity.drawObject(graphics2D, game);</span>
+<span class="nc" id="L140">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.15.0" timestamp="2019-12-20T02:17:16.902">
+<file name="/Users/irtazahashmi/Desktop/SEM/template/src/main/java/gui/GameScene.java">
+<violation beginline="100" endline="100" begincolumn="39" endcolumn="46" rule="AvoidDuplicateLiterals" ruleset="Error Prone" package="gui" class="GameScene" method="showGameScore" externalInfoUrl="https://pmd.github.io/pmd-6.15.0/pmd_rules_java_errorprone.html#avoidduplicateliterals" priority="3">
+The String literal &quot;Dialog&quot; appears 6 times in this file; the first occurrence is on line 100
+</violation>
+</file>
+</pmd>

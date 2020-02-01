@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Score.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">gui.sample</a> &gt; <span class="el_source">Score.java</span></div><h1>Score.java</h1><pre class="source lang-java linenums">package gui.sample;
+
+import static javafx.scene.text.TextAlignment.CENTER;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
+<span class="nc" id="L24">public class Score extends Application implements Initializable {</span>
+
+    @FXML
+    Label title;
+    @FXML
+    Label scoreField;
+    //init is short for initials.
+    // it is the textfield where the nickname is displayed.
+    @FXML
+    Label init;
+
+    //counter keeps track of the current nickname length.
+    private int counter;
+    //this is the maximum length we allow for nicknames.
+    //3 chars for three possible initials.
+<span class="nc" id="L39">    private int nicknameLength = 3;</span>
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+
+<span class="nc" id="L45">        int width = 800;</span>
+<span class="nc" id="L46">        int height = 600;</span>
+
+<span class="nc" id="L48">        Group group = new Group();</span>
+
+<span class="nc" id="L50">        URL url = new File(&quot;src/main/java/gui/resources/score.fxml&quot;).toURI().toURL();</span>
+
+<span class="nc" id="L52">        Parent root = FXMLLoader.load(url);</span>
+
+<span class="nc" id="L54">        group.getChildren().add(root);</span>
+<span class="nc" id="L55">        Scene scene = new Scene(group, width, height);</span>
+
+<span class="nc" id="L57">        stage.setScene(scene);</span>
+
+<span class="nc" id="L59">        Label temp = new Label();</span>
+<span class="nc" id="L60">        temp.setText(&quot;lorem ipsum&quot;);</span>
+
+<span class="nc" id="L62">        stage.getIcons().add(new Image(&quot;gui/resources/jet-plane.png&quot;));</span>
+<span class="nc" id="L63">        stage.setTitle(&quot;Asteroids&quot;);</span>
+
+<span class="nc" id="L65">        stage.show();</span>
+<span class="nc" id="L66">    }</span>
+
+
+    public static void main(String[] args) {
+<span class="nc" id="L70">        launch(args);</span>
+<span class="nc" id="L71">    }</span>
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+<span class="nc" id="L75">        displayScore();</span>
+<span class="nc" id="L76">        setHeader();</span>
+<span class="nc" id="L77">        init.setText(&quot;&quot;);</span>
+<span class="nc" id="L78">        counter = 0;</span>
+
+<span class="nc" id="L80">    }</span>
+
+    /**
+     * sets the score displayed on screen.
+     */
+    void displayScore() {
+
+        //get score from loosing player
+
+        //placeholder
+<span class="nc" id="L90">        scoreField.setText(&quot;1,090,475&quot;);</span>
+<span class="nc" id="L91">        scoreField.setTextAlignment(CENTER);</span>
+<span class="nc" id="L92">    }</span>
+
+    /**
+     * sets the title of the page.
+     */
+    void setHeader() {
+
+        //check if this a new highscore and say HIGHSCORE
+
+        //else
+<span class="nc" id="L102">        title.setText(&quot;GAME OVER&quot;);</span>
+
+<span class="nc" id="L104">    }</span>
+
+    /**
+     * constructs the nickname the user will save with their score.
+     * @param letter the letter they clicked on screen.
+     */
+    void setNickname(String letter) {
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (counter &lt; nicknameLength) {</span>
+<span class="nc" id="L112">            String current = init.getText();</span>
+<span class="nc" id="L113">            init.setText(current + letter + &quot; . &quot;);</span>
+<span class="nc" id="L114">            counter++;</span>
+        }
+<span class="nc" id="L116">        System.out.println(init.getText().length());</span>
+
+<span class="nc" id="L118">    }</span>
+
+    /**
+     * removed a letter from the input string.
+     */
+    void removeInit() {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (counter &gt; 0) {</span>
+<span class="nc" id="L125">            String current = init.getText();</span>
+<span class="nc" id="L126">            String newCurr = current.substring(0, current.length() - 4);</span>
+<span class="nc" id="L127">            init.setText(newCurr);</span>
+<span class="nc" id="L128">            counter--;</span>
+
+<span class="nc" id="L130">            System.out.println(&quot;Cnt: &quot; + counter + &quot;\nNew text: &quot; + newCurr);</span>
+        }
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * when a button is pressed, it gets the corresponding letter.
+     * Adds this letter to the string for the nickname.
+     * @param event uset's click.
+     */
+    @FXML
+    void keypadPress(MouseEvent event) {
+        //this line gts the id of the button.
+        //the id contains the corresponding letter
+        //that they clicked
+<span class="nc" id="L144">        String letter = ((Button) event.getSource()).getText();</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (letter.equals(&quot;del&quot;)) {</span>
+<span class="nc" id="L146">            removeInit();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        } else if (letter.equals(&quot;enter&quot;)) {</span>
+<span class="nc" id="L148">            getNickName();</span>
+            //
+            //open the next page...
+            //
+        } else {
+<span class="nc" id="L153">            setNickname(letter);</span>
+        }
+<span class="nc" id="L155">    }</span>
+
+    /**
+     * retrieves the input of user.
+     * @return the string containing the input.
+     */
+    public String getNickName() {
+
+<span class="nc" id="L163">        return init.getText();</span>
+    }
+
+    /**
+     * the buttons will glow when the user hovers over them.
+     * @param event the user's mouse curser position.
+     */
+    @FXML
+    void lightUp(MouseEvent event) {
+
+<span class="nc" id="L173">        Button btn = (Button) event.getSource();</span>
+
+<span class="nc" id="L175">        Glow glow = new Glow();</span>
+<span class="nc" id="L176">        Bloom bloom = new Bloom();</span>
+
+<span class="nc" id="L178">        glow.setInput(bloom);</span>
+<span class="nc" id="L179">        glow.setLevel(1);</span>
+
+<span class="nc" id="L181">        btn.setEffect(glow);</span>
+<span class="nc" id="L182">    }</span>
+
+    /**
+     * returns the button to its natural (darker/no glow).
+     * state when the mouse is moved off.
+     * @param event the users mouse hovering.
+     */
+    @FXML
+    void darken(MouseEvent event) {
+
+<span class="nc" id="L192">        Button btn = (Button) event.getSource();</span>
+
+<span class="nc" id="L194">        Glow glow = new Glow();</span>
+<span class="nc" id="L195">        Bloom bloom = new Bloom();</span>
+
+<span class="nc" id="L197">        glow.setInput(bloom);</span>
+<span class="nc" id="L198">        glow.setLevel(0);</span>
+
+<span class="nc" id="L200">        btn.setEffect(glow);</span>
+<span class="nc" id="L201">    }</span>
+
+    public int getCounter() {
+<span class="nc" id="L204">        return counter;</span>
+    }
+
+    public void setCounter(int counter) {
+<span class="nc" id="L208">        this.counter = counter;</span>
+<span class="nc" id="L209">    }</span>
+
+    public int getNicknameLength() {
+<span class="nc" id="L212">        return nicknameLength;</span>
+    }
+
+    public void setNicknameLength(int nicknameLength) {
+<span class="nc" id="L216">        this.nicknameLength = nicknameLength;</span>
+<span class="nc" id="L217">    }</span>
+
+    public Label getTitle() {
+<span class="nc" id="L220">        return title;</span>
+    }
+
+    public void setTitle(Label title) {
+<span class="nc" id="L224">        this.title = title;</span>
+<span class="nc" id="L225">    }</span>
+
+    public Label getScoreField() {
+<span class="nc" id="L228">        return scoreField;</span>
+    }
+
+    public void setScoreField(Label scoreField) {
+<span class="nc" id="L232">        this.scoreField = scoreField;</span>
+<span class="nc" id="L233">    }</span>
+
+    public Label getInit() {
+<span class="nc" id="L236">        return init;</span>
+    }
+
+    public void setInit(Label init) {
+<span class="nc" id="L240">        this.init = init;</span>
+<span class="nc" id="L241">    }</span>
+}
+
+
+
+
+
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

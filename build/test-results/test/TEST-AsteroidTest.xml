@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="AsteroidTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2019-12-19T23:16:50" hostname="Irtazas-MacBook-Pro.local" time="4.122">
+  <properties/>
+  <testcase name="constructorTest()" classname="AsteroidTest" time="3.466"/>
+  <testcase name="collisionAsteroidTest()" classname="AsteroidTest" time="0.009"/>
+  <testcase name="drawObjectTest()" classname="AsteroidTest" time="0.645"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

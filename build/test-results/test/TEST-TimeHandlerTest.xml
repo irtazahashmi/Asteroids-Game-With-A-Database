@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TimeHandlerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2019-12-19T23:16:54" hostname="Irtazas-MacBook-Pro.local" time="20.018">
+  <properties/>
+  <testcase name="setNumberOfCyclesPerSecondTest()" classname="TimeHandlerTest" time="0.002"/>
+  <testcase name="updateTest()" classname="TimeHandlerTest" time="0.002"/>
+  <testcase name="isCycleGoneTest()" classname="TimeHandlerTest" time="20.01"/>
+  <testcase name="setPausedTest()" classname="TimeHandlerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

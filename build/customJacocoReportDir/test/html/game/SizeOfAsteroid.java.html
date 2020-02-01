@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SizeOfAsteroid.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">template</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">SizeOfAsteroid.java</span></div><h1>SizeOfAsteroid.java</h1><pre class="source lang-java linenums">package game;
+
+import java.awt.Polygon;
+
+/**
+ * A class for defining different asteroids size.
+ */
+<span class="fc" id="L8">@SuppressWarnings(&quot;PMD.DataflowAnomalyAnalysis&quot;)</span>
+public enum SizeOfAsteroid {
+
+    /**
+     * SmallAsteroid asteroid.
+     */
+<span class="fc" id="L14">    SmallAsteroid(17.0, 100),</span>
+
+    /**
+     * Medium game.Asteroid asteroid.
+     */
+<span class="fc" id="L19">    MediumAsteroid(35.0, 50),</span>
+
+    /**
+     * Large game.Asteroid asteroid.
+     */
+<span class="fc" id="L24">    LargeAsteroid(45.0, 25);</span>
+
+
+    private static final int POINTS = 5;
+
+    /**
+     * Shape of the asteroid.
+     */
+    public final Polygon polygon;
+
+    /**
+     * Radius of asteroid.
+     */
+    public final double radius;
+
+    /**
+     * Points gained by destroying an asteroid.
+     */
+    public final int points;
+
+    /**
+     * Size of Asteroid constructor.
+     * @param radius radius of asteroid
+     * @param value points associated with it
+     */
+<span class="fc" id="L49">    SizeOfAsteroid(double radius, int value) {</span>
+<span class="fc" id="L50">        this.polygon = drawAsteroid(radius);</span>
+<span class="fc" id="L51">        this.radius = radius;</span>
+<span class="fc" id="L52">        this.points = value;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Drawing an asteroid.
+     * @param radius radius of asteroid.
+     * @return polygon shaped asteroid.
+     */
+    public static Polygon drawAsteroid(double radius) {
+<span class="fc" id="L61">        int[] locationX = new int[POINTS];</span>
+<span class="fc" id="L62">        int[] locationY = new int[POINTS];</span>
+
+<span class="fc" id="L64">        double angle = (2 * Math.PI / POINTS);</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (int i = 0; i &lt; POINTS; i++) {</span>
+<span class="fc" id="L67">            locationX[i] = (int) (radius * Math.sin(i * angle));</span>
+<span class="fc" id="L68">            locationY[i] = (int) (radius * Math.cos(i * angle));</span>
+        }
+
+<span class="fc" id="L71">        Polygon asteroid = new Polygon(locationX, locationY, POINTS);</span>
+<span class="fc" id="L72">        return asteroid;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
